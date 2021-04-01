@@ -2,7 +2,6 @@ from easysnmp import Session
 import easysnmp
 from tabulate import tabulate
 
-
 def printTable(table, header):
     print(tabulate(
         table,
@@ -14,9 +13,14 @@ def printTable(table, header):
 #
 def printGridTCP(localAddress, localPort, remAddress, remPort, status):
     table = []
-    statusList = ['1', '2', '3', '4', 'ESTABLISHED']
     for i in range(0, len(localAddress)):
-        table.append(['tcp', localAddress[i].value, localPort[i].value, remAddress[i].value, remPort[i].value, statusList[int(status[i].value)-1]])
+        table.append(['tcp',
+                        localAddress[i].value,
+                        localPort[i].value,
+                        remAddress[i].value,
+                        remPort[i].value,
+                        "ESTABLISHED" if status[i].value == "5" else status[i].value
+                    ])
     printTable(table, ['Protocol', 'Local IP', 'Local Port', 'Remote IP', 'Remote Port', 'Status'])
 
 #
