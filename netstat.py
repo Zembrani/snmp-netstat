@@ -26,12 +26,21 @@ def printGridTCP(localAddress, localPort, remAddress, remPort, status):
 #
 # Funcao que pega as listas de valores geradas e imprimme em forma de grid
 #
-def printGridUDP(localAddress, localPort):
+def printGridUDP(localAddress, localPort, remAddress, remPort):
+    table = []
+    for i in range(0, len(localAddress)):
+        table.append(['udp', localAddress[i].value, localPort[i].value, remAddress[i].value, remPort[i].value])
+    printTable(table, ['Protocol', 'Local IP', 'Local Port', 'Remote IP', 'Remote Port'])
+
+def printGridUDP2(localAddress, localPort):
     table = []
     for i in range(0, len(localAddress)):
         table.append(['udp', localAddress[i].value, localPort[i].value])
     printTable(table, ['Protocol', 'Local IP', 'Local Port'])
 
+def imprimir(var):
+    for i in var:
+        print(i)
 
 if __name__ == "__main__":
 
@@ -75,7 +84,22 @@ if __name__ == "__main__":
     # Chamadas walk para os OID referentes ao udp
     #
     if 'udp' in method:
+        
         localAddress = session.walk('udpLocalAddress')
         localPort = session.walk('udpLocalPort')
+        table = session.walk('udpEndpointTable')
+        printGridUDP2(localAddress, localPort)
 
-        printGridUDP(localAddress, localPort)
+        print()
+        imprimir(table)
+
+        localAddress = session.walk('.1.3.6.1.2.1.7.7.1.2.0')
+        localPort = session.walk('.1.3.6.1.2.1.7.7.1.3.0')
+        remAddress = session.walk('udpEndpointRemoteAddress')
+        remPort = session.walk('udpEndpointRemotePort')
+        print("aqui")
+        print(localAddress)
+        print(localPort)
+        print(remAddress)
+        print(remPort)
+        printGridUDP(localAddress, localPort, remAddress, remPort)
